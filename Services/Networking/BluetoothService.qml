@@ -462,6 +462,7 @@ Singleton {
 
   // Interaction state
   property bool pinRequired: false
+  property string passkeyDisplay: ""
 
   function submitPin(pin) {
     if (pairingProcess.running) {
@@ -475,6 +476,7 @@ Singleton {
       pairingProcess.running = false;
     }
     root.pinRequired = false;
+    root.passkeyDisplay = "";
   }
 
   // Interactive pairing process
@@ -487,10 +489,17 @@ Singleton {
           root.pinRequired = true;
           Logger.i("Bluetooth", "PIN required for pairing");
         }
+        var pdPrefix = "PASSKEY_DISPLAY:";
+        var pdIdx = data.indexOf(pdPrefix);
+        if (pdIdx !== -1) {
+          root.passkeyDisplay = data.substring(pdIdx + pdPrefix.length).trim();
+          Logger.i("Bluetooth", "Passkey display for remote device: " + root.passkeyDisplay);
+        }
       }
     }
     onExited: {
       root.pinRequired = false;
+      root.passkeyDisplay = "";
       Logger.i("Bluetooth", "Pairing process exited.");
       // Restore discovery if we paused it
       if (root._discoveryWasRunning) {

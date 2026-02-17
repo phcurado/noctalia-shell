@@ -644,6 +644,71 @@ Item {
     }
   }
 
+  Rectangle {
+    id: passkeyOverlay
+    visible: !root.showOnlyLists && BluetoothService.passkeyDisplay !== ""
+    anchors.centerIn: parent
+    width: Math.min(parent.width * 0.9, 400)
+    height: passkeyCol.implicitHeight + Style.marginL * 2
+    color: Color.mSurface
+    radius: Style.radiusM
+    border.color: Style.boxBorderColor
+    border.width: Style.borderS
+    z: 1000
+
+    MouseArea {
+      anchors.fill: parent
+      acceptedButtons: Qt.AllButtons
+      onClicked: mouse => mouse.accepted = true
+      onWheel: wheel => wheel.accepted = true
+    }
+
+    ColumnLayout {
+      id: passkeyCol
+      anchors.fill: parent
+      anchors.margins: Style.marginL
+      spacing: Style.marginL
+
+      NIcon {
+        icon: "keyboard"
+        pointSize: 48
+        color: Color.mPrimary
+        Layout.alignment: Qt.AlignHCenter
+      }
+      NText {
+        text: I18n.tr("panels.connections.authentication-required")
+        pointSize: Style.fontSizeXL
+        font.weight: Style.fontWeightBold
+        color: Color.mOnSurface
+        horizontalAlignment: Text.AlignHCenter
+        Layout.fillWidth: true
+      }
+      NText {
+        text: BluetoothService.passkeyDisplay
+        pointSize: 36
+        font.weight: Style.fontWeightBold
+        color: Color.mPrimary
+        horizontalAlignment: Text.AlignHCenter
+        Layout.fillWidth: true
+        font.letterSpacing: 8
+      }
+      NText {
+        text: I18n.tr("panels.connections.passkey-display-instructions")
+        pointSize: Style.fontSizeM
+        color: Color.mOnSurfaceVariant
+        wrapMode: Text.WordWrap
+        horizontalAlignment: Text.AlignHCenter
+        Layout.fillWidth: true
+      }
+      NButton {
+        text: I18n.tr("common.cancel")
+        icon: "x"
+        Layout.alignment: Qt.AlignHCenter
+        onClicked: BluetoothService.cancelPairing()
+      }
+    }
+  }
+
   // PIN Authentication Overlay
   Rectangle {
     id: pinOverlay

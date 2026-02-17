@@ -891,6 +891,7 @@
       "disable-discoverability-label": "Disable device visibility",
       "hide-unnamed-devices-description": "Hide devices that appear only as Bluetooth addresses.",
       "hide-unnamed-devices-label": "Hide unnamed devices",
+      "passkey-display-instructions": "Type this code on your device and press Enter.",
       "pin-instructions": "Please enter the PIN code displayed on your device.",
       "title": "Connections"
     },
