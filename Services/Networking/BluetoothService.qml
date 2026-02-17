@@ -489,11 +489,9 @@ Singleton {
           root.pinRequired = true;
           Logger.i("Bluetooth", "PIN required for pairing");
         }
-        var pdPrefix = "PASSKEY_DISPLAY:";
-        var pdIdx = data.indexOf(pdPrefix);
-        if (pdIdx !== -1) {
-          root.passkeyDisplay = data.substring(pdIdx + pdPrefix.length).trim();
-          Logger.i("Bluetooth", "Passkey display for remote device: " + root.passkeyDisplay);
+        if (data.indexOf("Passkey:") !== -1) {
+          var match = data.match(/\d{6}/);
+          if (match) root.passkeyDisplay = match[0];
         }
       }
     }

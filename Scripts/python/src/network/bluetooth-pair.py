@@ -2,7 +2,6 @@
 import errno
 import os
 import pty
-import re
 import select
 import subprocess
 import sys
@@ -89,7 +88,7 @@ def pair_fast():
     while time.time() - start_time < pair_wait_seconds:
         out = read_output(timeout=0.5)
         if out:
-            print(out, end='')
+            print(out, end='', flush=True)
             # Numberic Comparison (NC) 1 of 4 - Tested pairing with my iPhone.
             expected_confirmation: list[str] = ["Confirm passkey", "yes/no", "Request confirmation"]
             if any(e in out for e in expected_confirmation):
@@ -101,13 +100,6 @@ def pair_fast():
             if any(e in out for e in expected_auth):
                 log("Detected authorization request. Sending 'yes'.")
                 send_command("yes")
-
-            # Passkey Display (host shows code, user types it on the remote device)
-            if "Passkey:" in out and "Enter passkey" not in out:
-                passkey = re.sub(r'\x1b\[[^m]*m', '', out.split("Passkey:")[-1]).strip().split()[0]
-                if passkey:
-                    log(f"Passkey displayed for remote device: {passkey}")
-                    print(f"PASSKEY_DISPLAY:{passkey}", flush=True)
 
             # Interactive PIN/Passkey Entry (User must enter code on PC)
             expected_pin: list[str] = ["Enter passkey", "Enter PIN code"]
